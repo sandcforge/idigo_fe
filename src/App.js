@@ -1,11 +1,14 @@
-import logo from './logo.svg';
-import './App.css';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import apiData from './apiData.json';
+import './App.css';
+import {ItemCard} from './ItemCard.js';
+
+
 export const App = () => {
-  const [data, setData] = useState({ hits: [] });
- 
+  const [data, setData] = useState({ data: [] });
+
   useEffect(() => {
     const fetchData = async () => {
 
@@ -13,7 +16,6 @@ export const App = () => {
       const result = await axios(
         'https://hn.algolia.com/api/v1/search?query=redux',
       );
- 
       setData(result.data);
     };
  
@@ -23,14 +25,7 @@ export const App = () => {
  
   return (
     <>
-    <img src={'https://img.snailsmall.com/6b809b29-9932-425e-acea-09ef2d4840ba.jpg'} />
-    <ul>
-      {data.hits.map(item => (
-        <li key={item.objectID}>
-          <a href={item.url}>{item.title}</a>
-        </li>
-      ))}
-    </ul>
+      <ItemCard details={1}/>
     </>
   );
 
