@@ -25,7 +25,7 @@ export const App = () => {
  
   return (
     <>
-      <ItemCard details={1}/>
+      {apiData.map((item) => <ItemCard key={item.GodId} details={item}/>)}
     </>
   );
 
