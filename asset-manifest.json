@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/idigo/static/css/main.9d5b29c0.chunk.css",
-    "main.js": "/idigo/static/js/main.8173a56c.chunk.js",
-    "main.js.map": "/idigo/static/js/main.8173a56c.chunk.js.map",
-    "runtime-main.js": "/idigo/static/js/runtime-main.02b2d6d2.js",
-    "runtime-main.js.map": "/idigo/static/js/runtime-main.02b2d6d2.js.map",
-    "static/js/2.da7590a6.chunk.js": "/idigo/static/js/2.da7590a6.chunk.js",
-    "static/js/2.da7590a6.chunk.js.map": "/idigo/static/js/2.da7590a6.chunk.js.map",
-    "static/js/3.bbe91a44.chunk.js": "/idigo/static/js/3.bbe91a44.chunk.js",
-    "static/js/3.bbe91a44.chunk.js.map": "/idigo/static/js/3.bbe91a44.chunk.js.map",
+    "main.js": "/idigo/static/js/main.b6d614ce.chunk.js",
+    "main.js.map": "/idigo/static/js/main.b6d614ce.chunk.js.map",
+    "runtime-main.js": "/idigo/static/js/runtime-main.5c81eb21.js",
+    "runtime-main.js.map": "/idigo/static/js/runtime-main.5c81eb21.js.map",
+    "static/js/2.c0e27eb3.chunk.js": "/idigo/static/js/2.c0e27eb3.chunk.js",
+    "static/js/2.c0e27eb3.chunk.js.map": "/idigo/static/js/2.c0e27eb3.chunk.js.map",
+    "static/js/3.3c1fbf6d.chunk.js": "/idigo/static/js/3.3c1fbf6d.chunk.js",
+    "static/js/3.3c1fbf6d.chunk.js.map": "/idigo/static/js/3.3c1fbf6d.chunk.js.map",
     "index.html": "/idigo/index.html",
     "static/css/main.9d5b29c0.chunk.css.map": "/idigo/static/css/main.9d5b29c0.chunk.css.map",
-    "static/js/2.da7590a6.chunk.js.LICENSE.txt": "/idigo/static/js/2.da7590a6.chunk.js.LICENSE.txt"
+    "static/js/2.c0e27eb3.chunk.js.LICENSE.txt": "/idigo/static/js/2.c0e27eb3.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.02b2d6d2.js",
-    "static/js/2.da7590a6.chunk.js",
+    "static/js/runtime-main.5c81eb21.js",
+    "static/js/2.c0e27eb3.chunk.js",
     "static/css/main.9d5b29c0.chunk.css",
-    "static/js/main.8173a56c.chunk.js"
+    "static/js/main.b6d614ce.chunk.js"
   ]
 }
