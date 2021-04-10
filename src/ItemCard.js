@@ -12,7 +12,6 @@ import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
@@ -38,7 +37,22 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(12),
     backgroundColor: red[500],
   },
+  filmstripContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    overflowX: 'auto',
+    width: '100%',
+  },
+  image: {
+    borderStyle: 'solid',
+    borderWidth: 1,
+    height: 200,
+    margin: 1,
+  }
 }));
+
+
 
 export const ItemCard = (props) => {
   const classes = useStyles();
@@ -84,14 +98,24 @@ export const ItemCard = (props) => {
           <Typography variant='h5'>商品名称</Typography>
           <Typography paragraph>{details.GodName}</Typography>
           <Typography variant='h5'>商品价格</Typography>
-          <Typography paragraph>{details.GodPresentPrice}</Typography>
+          <Typography paragraph>{`\u00a5${details.GodPresentPrice}`}</Typography>
           <Typography variant='h5'>商品规格</Typography>
           <Typography paragraph>{details.GodSpecification}</Typography>
           <Typography variant='h5'>商品库存</Typography>
           <Typography paragraph>{details.GodSellStock}</Typography>
           <Typography variant='h5'>商品文案</Typography>
           <Typography paragraph>{details.GodAppDescribe}</Typography>
-          <img className={classes.image} src={details.GodImageUrl} />
+          <div className={classes.filmstripContainer}>
+              <img className={classes.image} src={details.GodImageUrl} alt={0} />
+              { details.GodImageUrl1 ? <img className={classes.image} src={details.GodImageUrl1} alt={1} /> : null }
+              { details.GodImageUrl2 ? <img className={classes.image} src={details.GodImageUrl2} alt={2} /> : null }
+              { details.GodImageUrl3 ? <img className={classes.image} src={details.GodImageUrl3} alt={3} /> : null }
+              { details.GodImageUrl4 ? <img className={classes.image} src={details.GodImageUrl4} alt={4} /> : null }
+              { details.GodImageUrl5 ? <img className={classes.image} src={details.GodImageUrl5} alt={5} /> : null }
+              { details.GodImageUrl6 ? <img className={classes.image} src={details.GodImageUrl6} alt={6} /> : null }
+              { details.GodImageUrl7 ? <img className={classes.image} src={details.GodImageUrl7} alt={7} /> : null }
+              { details.GodImageUrl8 ? <img className={classes.image} src={details.GodImageUrl8} alt={8} /> : null }
+          </div>
           <Typography variant='h5'>其他</Typography>
           <Typography paragraph>{`id: ${details.GodId}`}</Typography>
           <Typography paragraph>{`Code: ${details.GodCode}`}</Typography>
