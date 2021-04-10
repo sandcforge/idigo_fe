@@ -40,8 +40,8 @@ const useStyles = makeStyles((theme) => ({
     transform: 'rotate(180deg)',
   },
   avatar: {
-    width: theme.spacing(12),
-    height: theme.spacing(12),
+    width: theme.spacing(8),
+    height: theme.spacing(8),
     backgroundColor: red[500],
   },
   filmstripContainer: {
@@ -73,29 +73,15 @@ export const ItemCard = (props) => {
     <>
     <Card className={classes.root}>
       <CardHeader
+        onClick={handleExpandClick}
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
-            <img className={classes.image} src={details.GodImageUrl} />
+            <img width='100%' height='100%' src={details.GodImageUrl} />
           </Avatar>
         }
-        title={<Typography variant='h5'>{details.GodAppTitle}</Typography>}
+        title={details.GodAppTitle}
         subheader={`\u00a5${details.GodPresentPrice}`}
       />
-      <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </IconButton>
-      </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <TextListItem title='商品名称' content={details.GodName} />
