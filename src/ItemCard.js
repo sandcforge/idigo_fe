@@ -16,6 +16,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import Snackbar from "@material-ui/core/Snackbar";
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,20 +64,10 @@ const useStyles = makeStyles((theme) => ({
 export const ItemCard = (props) => {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-  const [snackbarStatus, setSnackbarStatus] = React.useState(false);
   const {details} = props;
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-  
-  const showSnackbar = () => {
-    setSnackbarStatus(true);
-  };
-
-  const hideSnackbar = (event, reason) => {
-    setSnackbarStatus(false);
-  };
-
 
   return (
     <>
@@ -91,11 +85,6 @@ export const ItemCard = (props) => {
         <IconButton aria-label="add to favorites">
           <FavoriteIcon />
         </IconButton>
-        <CopyToClipboard text={details.GodAppDescribe} onCopy={()=>{showSnackbar();}}>
-          <IconButton aria-label="share">
-            <ShareIcon />
-          </IconButton>
-        </CopyToClipboard>
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,
@@ -109,16 +98,11 @@ export const ItemCard = (props) => {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <Typography variant='h5'>商品名称</Typography>
-          <Typography paragraph>{details.GodName}</Typography>
-          <Typography variant='h5'>商品价格</Typography>
-          <Typography paragraph>{`\u00a5${details.GodPresentPrice}`}</Typography>
-          <Typography variant='h5'>商品规格</Typography>
-          <Typography paragraph>{details.GodSpecification}</Typography>
-          <Typography variant='h5'>商品库存</Typography>
-          <Typography paragraph>{details.GodSellStock}</Typography>
-          <Typography variant='h5'>商品文案</Typography>
-          <Typography paragraph>{details.GodAppDescribe}</Typography>
+          <TextListItem title='商品名称' content={details.GodName} />
+          <TextListItem title='商品价格' content={`\u00a5${details.GodPresentPrice}`} />
+          <TextListItem title='商品规格' content={details.GodSpecification} />
+          <TextListItem title='商品库存' content={details.GodSellStock} />
+          <TextListItem title='商品文案' content={details.GodAppDescribe} />
           <div className={classes.filmstripContainer}>
               <img className={classes.image} src={details.GodImageUrl} alt={0} />
               { details.GodImageUrl1 ? <img className={classes.image} src={details.GodImageUrl1} alt={1} /> : null }
@@ -130,27 +114,45 @@ export const ItemCard = (props) => {
               { details.GodImageUrl7 ? <img className={classes.image} src={details.GodImageUrl7} alt={7} /> : null }
               { details.GodImageUrl8 ? <img className={classes.image} src={details.GodImageUrl8} alt={8} /> : null }
           </div>
-          <Typography variant='h5'>其他</Typography>
-          <Typography paragraph>{`id: ${details.GodId}`}</Typography>
-          <Typography paragraph>{`Code: ${details.GodCode}`}</Typography>
-          <Typography paragraph>{`Barcode: ${details.GodBarcode}`}</Typography>
-          <Typography paragraph>{`Brand: ${details.GodBrand}`}</Typography>
-          <Typography paragraph>{`Num: ${details.GodNum}`}</Typography>
-          <Typography paragraph>{`Weight: ${details.GodWeight}`}</Typography>
+          <TextListItem title='其他' content={`id: ${details.GodId} Code: ${details.GodCode} Barcode: ${details.GodBarcode} Brand: ${details.GodBrand} Num: ${details.GodNum} Weight: ${details.GodWeight}`} />
         </CardContent>
       </Collapse>
     </Card>
-    <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left"
-        }}
-        open={snackbarStatus}
-        autoHideDuration={3000}
-        onClose={hideSnackbar}
-        message="Note archived"
-      />
+
     </>
   );
 
+};
+
+const TextListItem = (props) => {
+  const {title, content} = props;
+  const [snackbarStatus, setSnackbarStatus] = React.useState(false);
+
+  const showSnackbar = () => {
+    setSnackbarStatus(true);
+  };
+
+  const hideSnackbar = (event, reason) => {
+    setSnackbarStatus(false);
+  };
+
+
+  return (<>
+    <ListItem alignItems="flex-start">
+    <CopyToClipboard text={content} onCopy={()=>{showSnackbar();}}>
+      <ListItemIcon ><IconButton><FileCopyIcon /></IconButton></ListItemIcon>
+    </CopyToClipboard>
+    <ListItemText primary={title} secondary={content}/>
+  </ListItem>
+  <Snackbar
+    anchorOrigin={{
+      vertical: "bottom",
+      horizontal: "left"
+    }}
+    open={snackbarStatus}
+    autoHideDuration={3000}
+    onClose={hideSnackbar}
+    message={`复制到剪贴板：${content}.`}
+  />
+  </>);
 };
