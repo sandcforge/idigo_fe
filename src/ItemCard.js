@@ -1,19 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import Snackbar from "@material-ui/core/Snackbar";
 import ListItem from '@material-ui/core/ListItem';
@@ -25,9 +18,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: '100%',
     margin: 8,
-  },
-  image: {
-    width: '100%',
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -76,7 +66,7 @@ export const ItemCard = (props) => {
         onClick={handleExpandClick}
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
-            <img width='100%' height='100%' src={details.GodImageUrl} />
+            <img width='100%' height='100%' src={details.GodImageUrl} alt='avatar'/>
           </Avatar>
         }
         title={details.GodAppTitle}
@@ -90,7 +80,7 @@ export const ItemCard = (props) => {
           <TextListItem title='商品库存' content={details.GodSellStock} />
           <TextListItem title='商品文案' content={details.GodAppDescribe} />
           <div className={classes.filmstripContainer}>
-              <img className={classes.image} src={details.GodImageUrl} alt={0} />
+              <img className={classes.image} src={details.GodImageUrl} alt={'0'} />
               { details.GodImageUrl1 ? <img className={classes.image} src={details.GodImageUrl1} alt={1} /> : null }
               { details.GodImageUrl2 ? <img className={classes.image} src={details.GodImageUrl2} alt={2} /> : null }
               { details.GodImageUrl3 ? <img className={classes.image} src={details.GodImageUrl3} alt={3} /> : null }
