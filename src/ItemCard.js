@@ -14,10 +14,13 @@ import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+import Snackbar from "@material-ui/core/Snackbar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: '100%',
+    margin: 8,
   },
   image: {
     width: '100%',
@@ -57,12 +60,21 @@ const useStyles = makeStyles((theme) => ({
 export const ItemCard = (props) => {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+  const [snackbarStatus, setSnackbarStatus] = React.useState(false);
   const {details} = props;
-  console.log(details);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
- 
+  
+  const showSnackbar = () => {
+    setSnackbarStatus(true);
+  };
+
+  const hideSnackbar = (event, reason) => {
+    setSnackbarStatus(false);
+  };
+
+
   return (
     <>
     <Card className={classes.root}>
@@ -79,9 +91,11 @@ export const ItemCard = (props) => {
         <IconButton aria-label="add to favorites">
           <FavoriteIcon />
         </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
+        <CopyToClipboard text={details.GodAppDescribe} onCopy={()=>{showSnackbar();}}>
+          <IconButton aria-label="share">
+            <ShareIcon />
+          </IconButton>
+        </CopyToClipboard>
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,
@@ -126,6 +140,16 @@ export const ItemCard = (props) => {
         </CardContent>
       </Collapse>
     </Card>
+    <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left"
+        }}
+        open={snackbarStatus}
+        autoHideDuration={3000}
+        onClose={hideSnackbar}
+        message="Note archived"
+      />
     </>
   );
 
