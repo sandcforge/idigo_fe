@@ -13,6 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Container from "@material-ui/core/Container";
+import TextField from '@material-ui/core/TextField';
+import SearchIcon from '@material-ui/icons/Search';
 
 const corsProxy = 'https://api.codetabs.com/v1/proxy/?quest=';
 const EndpointOfProductCategory = `https://www.snailsmall.com/GoodsCategory/FindBigCategory`;
@@ -136,7 +138,7 @@ export const App = () => {
         >
           <Tab label="新品" {...a11yProps(CONST_NEW_PRODUCT_TAB_INDEX)} />
           <Tab label="分类" {...a11yProps(CONST_CATEGORY_TAB_INDEX)} />
-          <Tab label="折扣" {...a11yProps(CONST_ORDER_TAB_INDEX)} />
+          <Tab label="订单" {...a11yProps(CONST_ORDER_TAB_INDEX)} />
         </Tabs>
       </AppBar>
       <TabPanel value={rootTabValue} index={CONST_NEW_PRODUCT_TAB_INDEX}>
@@ -162,8 +164,18 @@ export const App = () => {
         </TabPanel>
 
       </TabPanel>
-      <TabPanel value={rootTabValue} index={CONST_ORDER_TAB_INDEX}>
-
+      <TabPanel value={rootTabValue} index={CONST_ORDER_TAB_INDEX} padding={1}>
+        <Box my={1}>
+          <TextField id="standard-basic" fullWidth={true} label="订单号" variant="outlined" />
+        </Box>
+        <Button
+          variant="contained"
+          fullWidth={true}
+          color="primary"
+          startIcon={<SearchIcon />}
+        >
+          查询订单
+        </Button>
       </TabPanel>
     </div>
   );
@@ -171,7 +183,7 @@ export const App = () => {
 };
 
 const TabPanel = (props) => {
-  const { children, value, index, ...other } = props;
+  const { padding = 0, children, value, index, ...other } = props;
   return (
     <div
       role="tabpanel"
@@ -181,7 +193,7 @@ const TabPanel = (props) => {
       {...other}
     >
       {value === index && (
-        <Box p={0}>
+        <Box px={padding}>
           <Typography>{children}</Typography>
         </Box>
       )}
