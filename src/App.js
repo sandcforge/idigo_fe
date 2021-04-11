@@ -20,6 +20,7 @@ const buildFetchUrl = (tabIndex, subTabIndex, pageIndex) => {
   if (tabIndex === 0) {
     return corsProxy + `https://www.snailsmall.com/Goods/FindPage?data={"Criterion":{"GodIsNew":true},"PageIndex":${pageIndex},"PageSize":${CONST_PAGE_SIZE}}`;
   }
+  return corsProxy + `https://www.snailsmall.com/Goods/FindPage?data={"Criterion":{"GodIsNew":true},"PageIndex":${pageIndex},"PageSize":${CONST_PAGE_SIZE}}`;
 };
 
 export const App = () => {
@@ -35,8 +36,15 @@ export const App = () => {
   const [tabPageStatus, setTabPageStatus] = React.useState({index: 0, hasMore: true});
   const [listData, setListData] = useState([]);
 
-  const handleRootTabChange = (event, newValue) => {
+  const handleRootTabChange = async (event, newValue) => {
     setRootTabValueValue(newValue);
+    clearListData();
+    fetchData();
+  };
+
+  const clearListData = () => {
+    setListData([]);
+    setTabPageStatus({index: 0, hasMore: true});
   };
 
   const loadListData = (newData) => {
