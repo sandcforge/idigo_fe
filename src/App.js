@@ -11,12 +11,16 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 
 const corsProxy = 'https://api.codetabs.com/v1/proxy/?quest=';
 const EndpointOfHealthProducts = `www.snailsmall.com/Goods/FindPage?data={"Criterion":{"GodCategoryCode":"57115bc2-bd99-4678-aff4-7ec259d14b72"},"PageIndex":0,"PageSize":50}`;
-const EndpointOfNewProducts = `https://www.snailsmall.com/Goods/FindPage?data={"Criterion":{"GodIsNew":true},"PageIndex":0,"PageSize":50}`;
-
-
+const CONST_PAGE_SIZE = 30;
+const buildFetchUrl = (tabIndex, subTabIndex, pageIndex) => {
+  if (tabIndex === 0) {
+    return corsProxy + `https://www.snailsmall.com/Goods/FindPage?data={"Criterion":{"GodIsNew":true},"PageIndex":${pageIndex},"PageSize":${CONST_PAGE_SIZE}}`;
+  }
+};
 
 export const App = () => {
   const useStyles = makeStyles((theme) => ({
@@ -28,18 +32,36 @@ export const App = () => {
   const classes = useStyles();
 
   const [rootTabValue, setRootTabValueValue] = React.useState(0);
+  const [tabPageStatus, setTabPageStatus] = React.useState({index: 0, hasMore: true});
+  const [listData, setListData] = useState([]);
 
   const handleRootTabChange = (event, newValue) => {
     setRootTabValueValue(newValue);
   };
 
-  const [data, setData] = useState([]);
+  const loadListData = (newData) => {
+    if (newData.length === 0) {
+      setTabPageStatus(prevState => ({
+        ...prevState,
+        hasMore: false,
+      }));
+    }
+    else {
+      setListData(listData.concat(newData));
+      setTabPageStatus(prevState => ({
+        ...prevState,
+        index: tabPageStatus.index+1,
+      }));
+    }
+    console.log(tabPageStatus);
+  };
+
+  const fetchData = async () => {
+    const result = await axios(buildFetchUrl(rootTabValue, 0, tabPageStatus.index));
+    loadListData(result.data.Data.DataBody);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios(corsProxy+EndpointOfNewProducts);
-      setData(result.data.Data.DataBody);
-    }; 
     fetchData();
   }, []);
 
@@ -58,7 +80,10 @@ export const App = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={rootTabValue} index={0}>
-        {data.map((item) => <ItemCard key={item.GodId} details={item}/>)}
+        {listData.map((item) => <ItemCard key={item.GodId} details={item}/>)}
+        {tabPageStatus.hasMore ? <Button variant="contained" color="primary" fullWidth={true} onClick={fetchData} >
+          加载更多
+        </Button> : null }
       </TabPanel>
       <TabPanel value={rootTabValue} index={1}>
         Item Two
