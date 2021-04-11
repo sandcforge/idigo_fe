@@ -12,6 +12,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Container from "@material-ui/core/Container";
 
 const corsProxy = 'https://api.codetabs.com/v1/proxy/?quest=';
 const EndpointOfProductCategory = `https://www.snailsmall.com/GoodsCategory/FindBigCategory`;
@@ -100,6 +101,29 @@ export const App = () => {
     fetchProductCategory();
   }, []);
 
+  const renderListView = () => {
+    return (<>
+      {listData.map((item) => <ItemCard key={item.GodId} details={item}/>)}
+      {tabPageStatus.hasMore &&
+        <Container maxWidth='98%' >
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth={true}
+            onClick={fetchData}
+          >
+            加载更多
+          </Button>
+          {/*Add a padding to avoid the mobile phone gesture area at the bottom.*/}
+          <Typography
+            component="div"
+            style={{ height: "12vh" }}
+          />
+        </Container>
+      }
+      </>
+    );
+  };
 
   return (
     <div className={classes.root}>
@@ -116,10 +140,7 @@ export const App = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={rootTabValue} index={CONST_NEW_PRODUCT_TAB_INDEX}>
-        {listData.map((item) => <ItemCard key={item.GodId} details={item}/>)}
-        {tabPageStatus.hasMore ? <Button variant="contained" color="primary" fullWidth={true} onClick={fetchData} >
-          加载更多
-        </Button> : null }
+        {renderListView()}
       </TabPanel>
       <TabPanel value={rootTabValue} index={CONST_CATEGORY_TAB_INDEX}>
         <AppBar position="static" color="default">
@@ -137,15 +158,12 @@ export const App = () => {
         </AppBar>
 
         <TabPanel value={subTabValue} index={subTabValue}>
-        {listData.map((item) => <ItemCard key={item.GodId} details={item}/>)}
-        {tabPageStatus.hasMore ? <Button variant="contained" color="primary" fullWidth={true} onClick={fetchData} >
-          加载更多
-        </Button> : null }
-      </TabPanel>
+          {renderListView()}
+        </TabPanel>
 
       </TabPanel>
       <TabPanel value={rootTabValue} index={CONST_ORDER_TAB_INDEX}>
-        Item Three
+
       </TabPanel>
     </div>
   );
