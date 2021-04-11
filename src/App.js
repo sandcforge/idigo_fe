@@ -14,14 +14,11 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
 const corsProxy = 'https://api.codetabs.com/v1/proxy/?quest=';
-const EndpointOfHealthProducts = `www.snailsmall.com/Goods/FindPage?data={"Criterion":{"GodCategoryCode":"57115bc2-bd99-4678-aff4-7ec259d14b72"},"PageIndex":0,"PageSize":50}`;
+const EndpointOfProductCategory = `https://www.snailsmall.com/GoodsCategory/FindBigCategory`;
 const CONST_PAGE_SIZE = 30;
-const buildFetchUrl = (tabIndex, subTabIndex, pageIndex) => {
-  if (tabIndex === 0) {
-    return corsProxy + `https://www.snailsmall.com/Goods/FindPage?data={"Criterion":{"GodIsNew":true},"PageIndex":${pageIndex},"PageSize":${CONST_PAGE_SIZE}}`;
-  }
-  return corsProxy + `https://www.snailsmall.com/Goods/FindPage?data={"Criterion":{"GodIsNew":true},"PageIndex":${pageIndex},"PageSize":${CONST_PAGE_SIZE}}`;
-};
+const CONST_NEW_PRODUCT_TAB_INDEX = 0;
+const CONST_CATEGORY_TAB_INDEX = 1;
+const CONST_ORDER_TAB_INDEX = 2;
 
 export const App = () => {
   const useStyles = makeStyles((theme) => ({
@@ -33,18 +30,28 @@ export const App = () => {
   const classes = useStyles();
 
   const [rootTabValue, setRootTabValueValue] = React.useState(0);
-  const [tabPageStatus, setTabPageStatus] = React.useState({index: 0, hasMore: true});
-  const [listData, setListData] = useState([]);
+  const defaultTabPageStatus = {index: 0, hasMore: true};
+  const [tabPageStatus, setTabPageStatus] = React.useState(defaultTabPageStatus);
 
-  const handleRootTabChange = async (event, newValue) => {
-    setRootTabValueValue(newValue);
+  const [listData, setListData] = useState([]);
+  const [productCategory, setProductCategory] = useState([]);
+
+  const [subTabValue, setSubTabValueValue] = React.useState(0);
+
+  const handleSubTabChange = (event, newValue) => {
     clearListData();
-    fetchData();
+    setSubTabValueValue(newValue);
+  };
+
+  const handleRootTabChange = (event, newValue) => {
+    console.log(newValue);
+    clearListData();
+    setRootTabValueValue(newValue);
   };
 
   const clearListData = () => {
     setListData([]);
-    setTabPageStatus({index: 0, hasMore: true});
+    setTabPageStatus(defaultTabPageStatus);
   };
 
   const loadListData = (newData) => {
@@ -61,17 +68,38 @@ export const App = () => {
         index: tabPageStatus.index+1,
       }));
     }
-    console.log(tabPageStatus);
   };
 
   const fetchData = async () => {
-    const result = await axios(buildFetchUrl(rootTabValue, 0, tabPageStatus.index));
-    loadListData(result.data.Data.DataBody);
+    const buildFetchUrl = (tabIndex, subTabIndex, pageIndex) => {
+      if (tabIndex === CONST_NEW_PRODUCT_TAB_INDEX) {
+        const EndpointOfNewProducts = `https://www.snailsmall.com/Goods/FindPage?data={"Criterion":{"GodIsNew":true},"PageIndex":${pageIndex},"PageSize":${CONST_PAGE_SIZE}}`;
+        return corsProxy + EndpointOfNewProducts;
+      }
+      else if (tabIndex === CONST_CATEGORY_TAB_INDEX) {
+        const EndpointOfCategroyProducts = `https://www.snailsmall.com/Goods/FindPage?data={"Criterion":{"GodCategoryCode":"${productCategory[subTabIndex].MgcCode}"},"PageIndex":${pageIndex},"PageSize":${CONST_PAGE_SIZE}}`;
+        return corsProxy + EndpointOfCategroyProducts;
+      }
+      return '';
+    };
+    if (rootTabValue === CONST_NEW_PRODUCT_TAB_INDEX || rootTabValue === CONST_CATEGORY_TAB_INDEX) {
+      const result = await axios(buildFetchUrl(rootTabValue, subTabValue, tabPageStatus.index));
+      loadListData(result.data.Data.DataBody);
+    }
+  };
+
+  const fetchProductCategory = async () => {
+    const result = await axios(corsProxy + EndpointOfProductCategory);
+    setProductCategory(result.data.Data);
   };
 
   useEffect(() => {
     fetchData();
+  }, [rootTabValue, subTabValue]);
+  useEffect(() => {
+    fetchProductCategory();
   }, []);
+
 
   return (
     <div className={classes.root}>
@@ -82,21 +110,41 @@ export const App = () => {
           onChange={handleRootTabChange}
           aria-label="simple tabs example"
         >
-          <Tab label="新品" {...a11yProps(0)} />
-          <Tab label="分类" {...a11yProps(1)} />
-          <Tab label="折扣" {...a11yProps(2)} />
+          <Tab label="新品" {...a11yProps(CONST_NEW_PRODUCT_TAB_INDEX)} />
+          <Tab label="分类" {...a11yProps(CONST_CATEGORY_TAB_INDEX)} />
+          <Tab label="折扣" {...a11yProps(CONST_ORDER_TAB_INDEX)} />
         </Tabs>
       </AppBar>
-      <TabPanel value={rootTabValue} index={0}>
+      <TabPanel value={rootTabValue} index={CONST_NEW_PRODUCT_TAB_INDEX}>
         {listData.map((item) => <ItemCard key={item.GodId} details={item}/>)}
         {tabPageStatus.hasMore ? <Button variant="contained" color="primary" fullWidth={true} onClick={fetchData} >
           加载更多
         </Button> : null }
       </TabPanel>
-      <TabPanel value={rootTabValue} index={1}>
-        Item Two
+      <TabPanel value={rootTabValue} index={CONST_CATEGORY_TAB_INDEX}>
+        <AppBar position="static" color="default">
+          <Tabs
+            value={subTabValue}
+            onChange={handleSubTabChange}
+            indicatorColor="primary"
+            textColor="primary"
+            variant="scrollable"
+            scrollButtons="on"
+            aria-label="scrollable auto tabs example"
+          >
+            {productCategory.map(( category, idx ) => <Tab key={category.MgcId} label={category.MgcName} {...a11yProps(idx)} />)}
+          </Tabs>
+        </AppBar>
+
+        <TabPanel value={subTabValue} index={subTabValue}>
+        {listData.map((item) => <ItemCard key={item.GodId} details={item}/>)}
+        {tabPageStatus.hasMore ? <Button variant="contained" color="primary" fullWidth={true} onClick={fetchData} >
+          加载更多
+        </Button> : null }
       </TabPanel>
-      <TabPanel value={rootTabValue} index={2}>
+
+      </TabPanel>
+      <TabPanel value={rootTabValue} index={CONST_ORDER_TAB_INDEX}>
         Item Three
       </TabPanel>
     </div>
@@ -115,7 +163,7 @@ const TabPanel = (props) => {
       {...other}
     >
       {value === index && (
-        <Box p={3}>
+        <Box p={0}>
           <Typography>{children}</Typography>
         </Box>
       )}
